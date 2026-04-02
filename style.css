@@ -719,3 +719,302 @@ body {
 ::-webkit-scrollbar-track        { background: var(--bg0); }
 ::-webkit-scrollbar-thumb        { background: var(--b2); border-radius: 2px; }
 ::-webkit-scrollbar-thumb:hover  { background: var(--b3); }
+
+
+/* ── RESPONSIVE ────────────────────────────────────────────── */
+
+@media (max-width: 768px) {
+  /* Reduce base font size */
+  body {
+    font-size: 16px;
+  }
+
+  /* Nav - compact layout */
+  #nav {
+    padding: 0 10px;
+    flex-wrap: wrap;
+    height: auto;
+    min-height: var(--nh);
+  }
+
+  .logo {
+    font-size: 20px;
+  }
+
+  .logo-tag {
+    font-size: 10px;
+  }
+
+  .nb {
+    font-size: 14px;
+    padding: 0 8px;
+  }
+
+  .nav-srch {
+    font-size: 14px;
+    padding: 4px 8px;
+  }
+
+  /* Search bar - compact */
+  #sbar {
+    padding: 0 10px;
+  }
+
+  .sw input {
+    font-size: 16px;
+    padding: 6px 10px 6px 28px;
+    width: 100%;
+    max-width: 280px;
+  }
+
+  .sw input:focus {
+    width: 100%;
+    max-width: 320px;
+  }
+
+  .si {
+    left: 7px;
+    font-size: 16px;
+  }
+
+  /* Main layout - hide sidebar on mobile */
+  #app {
+    flex-direction: column;
+    height: auto;
+    min-height: calc(100vh - var(--nh) - var(--sh));
+  }
+
+  #sb {
+    width: 100%;
+    border-right: none;
+    border-bottom: 1px solid var(--b0);
+    max-height: 200px;
+    overflow-x: auto;
+  }
+
+  .sbl {
+    display: inline-block;
+    padding: 10px 13px;
+    margin: 0;
+  }
+
+  .sbi {
+    display: inline-flex;
+    width: auto;
+    white-space: nowrap;
+  }
+
+  #ct {
+    padding: 15px;
+  }
+
+  /* Hero - smaller on mobile */
+  .hero {
+    flex-direction: column;
+    padding: 15px;
+    gap: 12px;
+  }
+
+  .hero-ico {
+    width: 36px;
+    height: 36px;
+    font-size: 24px;
+  }
+
+  .hero-title {
+    font-size: 28px;
+  }
+
+  .hero-desc {
+    font-size: 16px;
+  }
+
+  .hero-meta {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .hero-st {
+    font-size: 13px;
+  }
+
+  /* Section headings */
+  .sh-t {
+    font-size: 16px;
+  }
+
+  .sh-s {
+    font-size: 13px;
+  }
+
+  .sh-lnk {
+    font-size: 13px;
+  }
+
+  /* Collection grid - single column on small screens */
+  .cg {
+    grid-template-columns: 1fr;
+  }
+
+  .cc {
+    padding: 12px;
+  }
+
+  .cc-ico {
+    width: 24px;
+    height: 24px;
+    font-size: 16px;
+  }
+
+  .cc-n {
+    font-size: 16px;
+  }
+
+  .cc-c {
+    font-size: 12px;
+  }
+
+  .cc-d {
+    font-size: 14px;
+  }
+
+  .tag {
+    font-size: 11px;
+    padding: 1px 4px;
+  }
+
+  /* Libraries grid */
+  .lg {
+    grid-template-columns: 1fr;
+  }
+
+  .lc {
+    padding: 15px;
+  }
+
+  .lc-ico {
+    font-size: 24px;
+  }
+
+  .lc-n {
+    font-size: 20px;
+  }
+
+  .lc-d {
+    font-size: 14px;
+  }
+
+  .lc-p {
+    font-size: 12px;
+  }
+
+  /* Tables - horizontal scroll */
+  .st {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .st table {
+    min-width: 600px;
+  }
+
+  .st th {
+    font-size: 11px;
+    padding: 6px 10px;
+  }
+
+  .st td {
+    font-size: 14px;
+    padding: 8px 10px;
+  }
+
+  .sn {
+    font-size: 15px;
+  }
+
+  .su {
+    font-size: 12px;
+  }
+
+  .sd {
+    font-size: 13px;
+  }
+
+  .snote {
+    font-size: 12px;
+  }
+
+  /* Breadcrumb */
+  .bc {
+    font-size: 13px;
+    margin-bottom: 10px;
+  }
+
+  .bcl {
+    font-size: 13px;
+  }
+
+  /* Empty state */
+  .empty {
+    padding: 30px 20px;
+  }
+
+  .empty-i {
+    font-size: 28px;
+  }
+
+  .empty-t {
+    font-size: 16px;
+  }
+
+  .empty-d {
+    font-size: 14px;
+  }
+
+  /* Sidebar items on mobile */
+  .sbd {
+    width: 4px;
+    height: 4px;
+  }
+
+  .sbi {
+    font-size: 14px;
+    padding: 5px 10px;
+  }
+
+  .sbn {
+    font-size: 11px;
+  }
+}
+
+/* Extra small devices */
+@media (max-width: 480px) {
+  body {
+    font-size: 14px;
+  }
+
+  .logo {
+    font-size: 18px;
+  }
+
+  .nb {
+    font-size: 13px;
+    padding: 0 6px;
+  }
+
+  .hero-title {
+    font-size: 24px;
+  }
+
+  .hero-desc {
+    font-size: 14px;
+  }
+
+  .lc-n {
+    font-size: 18px;
+  }
+
+  .cc-n {
+    font-size: 15px;
+  }
+}
