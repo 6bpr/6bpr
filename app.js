@@ -188,17 +188,9 @@ function renderHome() {
     colls.forEach(({ id, c }) => {
       const previewTags = c.sites.slice(0, 3).map(s => `<span class="tag">${s.n}</span>`).join('');
       const moreBadge   = c.sites.length > 3 ? `<span class="tag">+${c.sites.length - 3}</span>` : '';
-      
-      // Extract image src from c.ico HTML
-      const imgMatch = c.ico.match(/src="([^"]+)"/);
-      const imgSrc = imgMatch ? imgMatch[1] : '';
 
       h += `
         <a class="cc" onclick="gc('${id}')">
-          <div class="cc-img-wrap">
-            <img class="cc-img" src="${imgSrc}" alt="${c.name}" onerror="this.style.display='none'">
-            <div class="cc-overlay"></div>
-          </div>
           <div class="cc-body">
             <div class="cc-h">
               <div class="cc-ico">${c.ico}</div>
@@ -268,16 +260,8 @@ function renderAllCollections() {
     <div class="cg">`;
 
   Object.entries(COLLS).forEach(([id, c]) => {
-    // Extract image src from c.ico HTML
-    const imgMatch = c.ico.match(/src="([^"]+)"/);
-    const imgSrc = imgMatch ? imgMatch[1] : '';
-
     h += `
       <a class="cc" onclick="gc('${id}')">
-        <div class="cc-img-wrap">
-          <img class="cc-img" src="${imgSrc}" alt="${c.name}" onerror="this.style.display='none'">
-          <div class="cc-overlay"></div>
-        </div>
         <div class="cc-body">
           <div class="cc-h">
             <div class="cc-ico">${c.ico}</div>
