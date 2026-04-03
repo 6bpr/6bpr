@@ -31,7 +31,7 @@ This is a **static site** — no build step, no dependencies, no server required
 
 Clone the repo:
 ```bash
-git clone https://github.com/YOUR_USERNAME/pirated-lib.git
+git clone https://github.com/6bpr/pirated-lib.git
 cd pirated-lib
 ```
 
@@ -107,13 +107,13 @@ Built with vanilla HTML, CSS, and JavaScript. Loads fast, works everywhere, resp
 
 ## 🤝 Contributing
 
-Got a site to add? Found a dead link? Want to improve the UI?
+Got a site to add? Want to improve the UI?
 
 1. Fork the repo
 2. Make your changes
 3. Open a PR
 
-All contributions are welcome — especially new entries, status updates, and corrections.
+All contributions are welcome — especially new entries, and corrections.
 
 ---
 
