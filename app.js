@@ -4,7 +4,107 @@
 // ─────────────────────────────────────────────────────────────
 
 
-// ── STATE ─────────────────────────────────────────────────────
+// ── SITE HEALTH CHECK ─────────────────────────────────────────
+//
+// Strategy: optimistic UI + async background checks
+// 1. Page renders instantly with manual status from data.js
+// 2. A "Checking…" state is shown immediately (or cached result if fresh)
+// 3. All site probes run in parallel via Promise.allSettled
+// 4. Results update cells in-place — no reflow, no flicker
+// 5. Results cached in localStorage for 30 min
+
+const HEALTH_KEY = 'pirated-lib-health';
+const HEALTH_TTL = 30 * 60 * 1000; // 30 min
+
+const _STATUS = {
+  checking: { label: 'Checking…', dot: 'y' },
+  online:   { label: 'Online',    dot: 'g' },
+  partial:  { label: 'Partial',   dot: 'y' },
+  down:     { label: 'Down',      dot: 'r' },
+};
+
+function _loadCache() {
+  try { return JSON.parse(localStorage.getItem(HEALTH_KEY)) || {}; } catch { return {}; }
+}
+
+function _saveCache(cache) {
+  try { localStorage.setItem(HEALTH_KEY, JSON.stringify(cache)); } catch {}
+}
+
+function _statusHTML(key) {
+  const s = _STATUS[key] ?? _STATUS.checking;
+  return `<span class="dot ${s.dot}"></span>${s.label}`;
+}
+
+/** Set all status cells for a URL to a given key. Safe to call even if element doesn't exist yet. */
+function _setStatus(url, key) {
+  const html = _statusHTML(key);
+  document.querySelectorAll(`[data-status-url="${CSS.escape(url)}"]`).forEach(el => {
+    if (el.dataset._statusKey === key) return; // skip no-op
+    el.dataset._statusKey = key;
+    el.innerHTML = html;
+  });
+}
+
+/**
+ * Probe a single URL. Returns 'online' on success, 'down' on failure.
+ * Uses no-cors fetch — can only detect if the server responds at all.
+ */
+async function _probe(url, { timeoutMs = 5000 } = {}) {
+  const controller = new AbortController();
+  const tid = setTimeout(() => controller.abort(), timeoutMs);
+
+  try {
+    await fetch(url, { mode: 'no-cors', signal: controller.signal, cache: 'no-store' });
+    return 'online';
+  } catch {
+    return 'down';
+  } finally {
+    clearTimeout(tid);
+  }
+}
+
+/**
+ * Run health checks for every site in a collection.
+ * - Instantly shows "Checking…" (or cached result if < TTL)
+ * - Probes all sites in parallel
+ * - Updates cells in-place when results arrive
+ * - Caches results for next visit
+ */
+function runHealth(collectionId) {
+  const c = COLLS[collectionId];
+  if (!c || !c.sites.length) return;
+
+  const cache = _loadCache();
+  const now = Date.now();
+  const pending = [];
+
+  c.sites.forEach(site => {
+    const cached = cache[site.u];
+
+    if (cached && now - cached.ts < HEALTH_TTL) {
+      // Fresh cache → show instantly
+      const key = cached.status === 'online' ? 'online' : 'down';
+      _setStatus(site.u, key);
+    } else {
+      // No cache or stale → show "Checking…"
+      _setStatus(site.u, 'checking');
+      pending.push(site);
+    }
+  });
+
+  // All probes in parallel
+  Promise.allSettled(pending.map(site => _probe(site.u).then(r => ({ url: site.u, result: r })))).then(results => {
+    results.forEach(entry => {
+      if (entry.status === 'fulfilled') {
+        const { url, result } = entry.value;
+        cache[url] = { status: result, ts: Date.now() };
+        _setStatus(url, result);
+      }
+    });
+    _saveCache(cache);
+  });
+}
 
 let PAGE  = 'home';   // current page key
 let LIB   = 'all';   // active library filter
@@ -338,7 +438,7 @@ function renderCollection(id) {
               <span class="su">${cleanUrl}</span>
               ${noteHtml}
             </td>
-            <td class="sc"><span class="dot ${site.s}"></span>${statusLabel}</td>
+            <td data-status-url="${site.u}" class="sc"><span class="dot ${site.s}"></span>${statusLabel}</td>
             <td><span class="sd">${site.d}</span></td>
             <td><div class="tags">${tagHtml}</div></td>
           </tr>`;
@@ -348,6 +448,9 @@ function renderCollection(id) {
         </tbody>
       </table>
     </div>`;
+
+  // Kick off health checks after render
+  setTimeout(() => runHealth(id), 100);
 
   return h;
 }
@@ -448,7 +551,7 @@ function doSearch(query) {
                   <a class="sn" href="${s.u}" target="_blank" rel="noopener noreferrer">${s.n}</a>
                   <span class="su">${cleanUrl}</span>
                 </td>
-                <td class="sc"><span class="dot ${s.s}"></span>${statusLabel}</td>
+                <td data-status-url="${s.u}" class="sc"><span class="dot ${s.s}"></span>${statusLabel}</td>
                 <td><span class="sd">${s.d}</span></td>
                 <td><div class="tags">${tagHtml}</div></td>
               </tr>`;

@@ -204,9 +204,9 @@ const COLLS = {
       { n: 'LelManga',    u: 'https://lelmanga.com',       note: 'French',         d: 'French manga reader with good catalog.',                                             s: 'g', t: ['FR', 'Free'] },
       { n: 'Scan-VF',     u: 'https://scan-vf.net',        note: 'French',         d: 'French scan and scanlation reader.',                                                s: 'g', t: ['FR', 'Free'] },
       { n: 'MangaLivre',  u: 'https://mangalivre.net',     note: 'Portuguese (BR)',d: 'Large Brazilian Portuguese manga aggregator.',                                       s: 'g', t: ['PT-BR', 'Free'] },
-      { n: 'LectorManga', u: 'https://lectormanga.com',    note: 'Spanish',        d: 'Spanish manga reader with a large catalog.',                                        s: 'g', t: ['ES', 'Free'] },
+      { n: 'LectorManga', u: 'https://lectormangaa.com',    note: 'Spanish',        d: 'Spanish manga reader with a large catalog.',                                        s: 'g', t: ['ES', 'Free'] },
       { n: 'NineManga',   u: 'https://es.ninemanga.com',   note: 'Multi-language', d: 'Multi-language manga site. Spanish, German, Italian and more.',                     s: 'g', t: ['Multi-lang'] },
-      { n: 'MangaOwl',    u: 'https://mangaowl.net',       note: '',               d: 'Free manga reading with broad catalog in several languages.',                       s: 'g', t: ['Free', 'Multi-lang'] },
+      { n: 'MangaOwl',    u: 'https://mangaowl.io',       note: '',               d: 'Free manga reading with broad catalog in several languages.',                       s: 'g', t: ['Free', 'Multi-lang'] },
     ],
   },
 
@@ -216,9 +216,9 @@ const COLLS = {
     lib: 'Manga',
     desc: 'Direct download of manga in PDF, EPUB, and CBZ formats for offline reading.',
     sites: [
-      { n: "Anna's Archive",  u: 'https://annas-archive.org', note: 'Best option',                 d: 'Free access to millions of books, light novels, manga. Download via IPFS, DC++, or HTTP. Includes licensed and legal manga.', s: 'g', t: ['Free', 'PDF', 'EPUB', 'IPFS'] },
+      { n: "Anna's Archive",  u: 'https://annas-archive.gl', note: 'Best option',                 d: 'Free access to millions of books, light novels, manga. Download via IPFS, DC++, or HTTP. Includes licensed and legal manga.', s: 'g', t: ['Free', 'PDF', 'EPUB', 'IPFS'] },
       { n: 'Z-Library',       u: 'https://z-lib.id',          note: 'Mirror domains change often', d: 'Free access to millions of books including light novels and manga.',                                                          s: 'g', t: ['Free', 'PDF', 'EPUB'] },
-      { n: 'Library Genesis', u: 'https://libgen.rs',          note: '',                            d: 'Classic academic and book repository. Good for manga volumes and art books.',                                                 s: 'g', t: ['Free', 'Classic'] },
+      { n: 'Library Genesis', u: 'https://libgen.im',          note: '',                            d: 'Classic academic and book repository. Good for manga volumes and art books.',                                                 s: 'g', t: ['Free', 'Classic'] },
     ],
   },
 
