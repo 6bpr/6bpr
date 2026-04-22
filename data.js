@@ -213,7 +213,7 @@ const COLLS = {
     lib: 'Manga',
     desc: 'Direct download of manga in PDF, EPUB, and CBZ formats for offline reading.',
     sites: [
-      { n: "Anna's Archive",  u: 'https://annas-archive.gl', note: 'Best option',                 d: 'Free access to millions of books, light novels, manga. Download via IPFS, DC++, or HTTP. Includes licensed and legal manga.', s: 'g', t: ['Free', 'PDF', 'EPUB', 'IPFS'] },
+      { n: "Anna's Archive",  u: 'https://annas-archive.pk', note: 'Best option',                 d: 'Free access to millions of books, light novels, manga. Download via IPFS, DC++, or HTTP. Includes licensed and legal manga.', s: 'g', t: ['Free', 'PDF', 'EPUB', 'IPFS'] },
       { n: 'Z-Library',       u: 'https://z-lib.id',          note: 'Mirror domains change often', d: 'Free access to millions of books including light novels and manga.',                                                          s: 'g', t: ['Free', 'PDF', 'EPUB'] },
       { n: 'Library Genesis', u: 'https://libgen.im',          note: '',                            d: 'Classic academic and book repository. Good for manga volumes and art books.',                                                 s: 'g', t: ['Free', 'Classic'] },
     ],
@@ -271,12 +271,12 @@ const COLLS = {
     lib: 'Novels',
     desc: 'A light novel is a style of Japanese young adult novel primarily targeting high school and middle school students.',
     sites: [
-      { n: "Anna's Archive", u: 'https://annas-archive.org',      note: 'Best option',     d: 'Free access to millions of books, light novels, and manga. Download in PDF/EPUB formats.',                              s: 'g', t: ['Free', 'PDF', 'EPUB'] },
+      { n: "Anna's Archive", u: 'https://annas-archive.pk',      note: 'Best option',     d: 'Free access to millions of books, light novels, and manga. Download in PDF/EPUB formats.',                              s: 'g', t: ['Free', 'PDF', 'EPUB'] },
       { n: 'Z-Library',      u: 'https://z-lib.id',               note: '',                d: 'Free access to millions of books including light novels and manga.',                                                      s: 'g', t: ['Free', 'PDF', 'EPUB'] },
       { n: 'Novel Updates',  u: 'https://novelupdates.com',        note: '',                d: 'Track and discover fan-translated light novels and web novels. Includes MangaDex, official translations, and most popular groups.', s: 'g', t: ['Tracker', 'Fan TL', 'Community'] },
       { n: 'J-Novel Club',   u: 'https://j-novel.club',            note: 'Legal',           d: 'Official English translations of popular light novels. Subscription-based, early access model.',                         s: 'g', t: ['Legal', 'Official', 'Paid'] },
       { n: 'Yen Press',      u: 'https://yenpress.com',            note: 'Legal publisher', d: 'Official publisher for many popular light novel licenses in English.',                                                    s: 'g', t: ['Legal', 'Official'] },
-      { n: 'LightNovelPub',  u: 'https://lightnovelpub.vip',       note: '',                d: 'Free light novel reader. Large catalog of machine and fan translations.',                                                s: 'g', t: ['Free'] },
+      { n: 'LightNovelPub',  u: 'https://lightnovelpub.me',       note: '',                d: 'Free light novel reader. Large catalog of machine and fan translations.',                                                s: 'g', t: ['Free'] },
       { n: 'NovelBin',       u: 'https://novelbin.com',            note: '',                d: 'Free light novel reader. Large catalog.',                                                                                 s: 'g', t: ['Free'] },
       { n: 'Lnreader',       u: 'https://github.com/LNReader/lnreader', note: 'Android app', d: 'An Android application for reading light novels. Open source.',                                                        s: 'g', t: ['FOSS', 'Android'] },
     ],

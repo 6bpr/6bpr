@@ -39,27 +39,70 @@ function _setStatus(url, key) {
 }
 
 /**
- Probe a single URL. Returns 'online' on success, 'down' on failure.
- Uses no-cors fetch — can only detect if the server responds at all.
+ * Probe a single URL.
+ * Returns 'online' if the server responds with HTTP 200–399, 'down' otherwise.
+ *
+ * Strategy:
+ *   1. Try a normal (CORS) fetch first — if the server returns 2xx/3xx we get a real status code.
+ *   2. If CORS blocks it (TypeError), fall back to no-cors mode — a successful opaque response
+ *      still proves the server is up.
+ *   3. Retry up to 2 times with brief backoff to survive transient glitches.
+ *   4. Use a 4-second timeout per attempt for responsiveness.
  */
-async function _probe(url, { timeoutMs = 5000 } = {}) {
-  const controller = new AbortController();
-  const tid = setTimeout(() => controller.abort(), timeoutMs);
+async function _probe(url, { timeoutMs = 4000, maxRetries = 2 } = {}) {
+  for (let attempt = 0; attempt < maxRetries; attempt++) {
+    // Exponential backoff: 0 ms, 800 ms
+    if (attempt > 0) {
+      await new Promise(r => setTimeout(r, 800 * attempt));
+    }
 
-  try {
-    await fetch(url, { mode: 'no-cors', signal: controller.signal, cache: 'no-store' });
-    return 'online';
-  } catch {
-    return 'down';
-  } finally {
-    clearTimeout(tid);
+    const controller = new AbortController();
+    const tid = setTimeout(() => controller.abort(), timeoutMs);
+
+    try {
+      // --- Attempt 1: standard CORS fetch (gives real HTTP status) ---
+      const res = await fetch(url, {
+        method: 'HEAD',            // HEAD is lighter than GET
+        mode: 'cors',
+        signal: controller.signal,
+        cache: 'no-store',
+        redirect: 'follow',
+      });
+      // 200–399 → online
+      if (res.status >= 200 && res.status < 400) {
+        return 'online';
+      }
+      // 4xx / 5xx → fall through to no-cors fallback or retry
+    } catch (corsErr) {
+      // CORS request blocked (TypeError) or network error.
+      // Try no-cors as a fallback — if the server responds at all, it's up.
+      try {
+        const res2 = await fetch(url, {
+          method: 'HEAD',
+          mode: 'no-cors',
+          signal: controller.signal,
+          cache: 'no-store',
+          redirect: 'follow',
+        });
+        // no-cors succeeded → server is reachable → online
+        return 'online';
+      } catch {
+        // Both CORS and no-cors failed — this attempt is a miss.
+        // Only mark as 'down' after all retries are exhausted.
+      }
+    } finally {
+      clearTimeout(tid);
+    }
   }
+
+  // All retries exhausted
+  return 'down';
 }
 
 /**
  Run health checks for every site in a collection.
  Instantly shows "Checking…" (or cached result if < TTL)
- Probes all sites in parallel
+ Probes all sites in parallel (batched to 6 concurrent to avoid browser limits)
  Updates cells in-place when results arrive
  Caches results for next visit
  */
@@ -85,15 +128,24 @@ function runHealth(collectionId) {
     }
   });
 
-  // All probes in parallel
-  Promise.allSettled(pending.map(site => _probe(site.u).then(r => ({ url: site.u, result: r })))).then(results => {
-    results.forEach(entry => {
-      if (entry.status === 'fulfilled') {
-        const { url, result } = entry.value;
-        cache[url] = { status: result, ts: Date.now() };
-        _setStatus(url, result);
-      }
-    });
+  // Batched parallel probes — max 6 concurrent to avoid browser connection limits
+  const CONCURRENCY = 6;
+  let idx = 0;
+
+  function runNext() {
+    if (idx >= pending.length) return Promise.resolve();
+    const site = pending[idx++];
+    return _probe(site.u).then(result => {
+      cache[site.u] = { status: result, ts: Date.now() };
+      _setStatus(site.u, result);
+    }).catch(() => {
+      cache[site.u] = { status: 'down', ts: Date.now() };
+      _setStatus(site.u, 'down');
+    }).then(runNext);
+  }
+
+  // Launch CONCURRENCY workers
+  Promise.allSettled(Array.from({ length: Math.min(CONCURRENCY, pending.length) }, runNext)).then(() => {
     _saveCache(cache);
   });
 }
@@ -250,7 +302,7 @@ function renderHome() {
     <div class="hero">
       <div class="hero-ico"> <img src="images/Pink rodamrix.jpeg" alt="Pink rodamrix" width="50" height="50" /> </div>
       <div>
-        <div class="hero-title">Pirated Lib</div>
+        <div class="hero-title">6bpr</div>
         <div class="hero-desc">
           A curated index listing and comparing all types of websites, applications,
           and services for consuming Japanese media. Browse by library, collection,
